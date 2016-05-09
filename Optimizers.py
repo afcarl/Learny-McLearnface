@@ -14,10 +14,17 @@ These methods must be iterated an indefinite number of times in order to achieve
 Each method will take a dictionary of options, which contains settings specific to that method
 """
 
+def optimize(theta, dtheta, options):
+    update_rule = options.setdefault['update_rule', 'sgd']
+    if update_rule == 'sgd':
+        return sgd(theta, dtheta, options)
+    else:
+        raise ValueError("The given update rule was not recognized.")
+
 """
 Stochastic gradient descent.
 https://en.wikipedia.org/wiki/Stochastic_gradient_descent
-This method takes one option:
+REQUIRED OPTIONS:
     'learning_rate': a real number >0, overall step size
 """
 def sgd(theta, dtheta, options):

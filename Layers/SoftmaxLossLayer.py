@@ -28,3 +28,8 @@ class SoftmaxLossLayer(object):
         dx[range(N), y] -= 1
         dx /= N
         return loss, dx
+        
+    def evaluate(self, scores):
+        shifted_scores = scores - np.max(scores, axis = 1, keepdims=True)
+        probabilities = np.exp(shifted_scores) / np.sum(np.exp(shifted_scores), axis = 1, keepdims = True)
+        return probabilities

@@ -13,6 +13,8 @@ from Layers.SoftmaxLossLayer import *
 from Layers.AffineLayer import *
 from Layers.ReLULayer import *
 
+from Evaluator import *
+
 def main():
     nn = NeuralNetwork(28*28)
     nn.add_layer('Affine', {'neurons':500, 'weight_scale':1e-2})
@@ -23,10 +25,8 @@ def main():
     test_data = np.random.randn(100, 28*28)
     test_y = np.random.randint(1, 10, 100)
     
-    affine1 = nn.layers[0].forward(test_data)
-    relu = nn.layers[1].forward(affine1)
-    affine2 = nn.layers[2].forward(relu)
-    loss, grads_b_softmax = nn.layers[3].loss(affine2, test_y)
-    print 'Loss:', loss 
+    evaluator = Evaluator(nn, test_data)
+    print evaluator.predict()[0].shape
+    print evaluator.predict()[1].shape
     
 main()

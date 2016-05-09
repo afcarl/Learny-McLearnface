@@ -41,5 +41,12 @@ class NeuralNetwork(object):
         else:
             raise InvalidLayerException('Invalid layer: ' + layer_type)
             
+    def forward(self, X):
+        forward_tensor = X
+        for layer in self.layers:
+            if layer == self.layers[-1]:
+                return self.layers[-1].evaluate(forward_tensor)
+            forward_tensor = layer.forward(forward_tensor)
+            
 class InvalidLayerException(Exception):
     pass
