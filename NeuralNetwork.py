@@ -8,6 +8,7 @@ Created on Fri May 06 14:34:21 2016
 from Layers.SoftmaxLossLayer import *
 from Layers.AffineLayer import *
 from Layers.ReLULayer import *
+from Layers.SigmoidLayer import *
 
 class NeuralNetwork(object):
     
@@ -31,6 +32,10 @@ class NeuralNetwork(object):
             self.num_layers += 1
         elif layer_type == 'ReLU':
             layer = ReLULayer(in_dim)
+            self.layers.append(layer)
+            self.num_layers += 1
+        elif layer_type == 'Sigmoid':
+            layer = SigmoidLayer(in_dim)
             self.layers.append(layer)
             self.num_layers += 1
         else:
