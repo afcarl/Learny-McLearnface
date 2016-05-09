@@ -5,6 +5,20 @@ Created on Fri May 06 14:54:11 2016
 @author: Alexander Weaver
 """
 
+"""
+Performs an affine (fully connected) operation on its input
+An affine layer with out_dim neurons takes a data array of size Nx(in_dim), x
+and returns a linearly transformed Nx(out_dim) data array
+The transformation result, z, is determined by a (in_dim)x(out_dim) weight matrix, W,  and
+a (out_dim) bias vector, b.  The transformation of any one data point (one row in x) is given by:
+    z = Wx + b
+Constructing this object initializes the parameters following a gaussian random distribution with 
+standard deviation given by weight_scale.  
+Forward propagating this object performs the affine transformation on the given array, X.
+Backpropagating this object returns the derivatives of x, W, and b with respect to the final output of
+the network.
+"""
+
 import numpy as np
 
 class AffineLayer(object):

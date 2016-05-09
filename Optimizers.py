@@ -6,11 +6,11 @@ Created on Sun May 08 23:36:11 2016
 """
 
 """
-A collection of first order optimization methods.
+A collection of update rules for first order optimization methods.
 In general, these methods will take an array of parameters (theta)
 and an array of their derivatives with respect to some function, L
 This will attempt to find parameters which minimize L, iteratively.  
-These methods must be iterated an indefinitenumber of times in order to achieve the best result.
+These methods must be iterated an indefinite number of times in order to achieve the best result.
 Each method will take a dictionary of options, which contains settings specific to that method
 """
 

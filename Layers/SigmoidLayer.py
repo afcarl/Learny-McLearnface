@@ -5,6 +5,13 @@ Created on Sun May 08 20:14:20 2016
 @author: Alexander Weaver
 """
 
+"""
+Performs the Sigmoid activation function elementwise on its input array 
+    Sigmoid(x) = 1/(1 + e^(-x))
+Forward propagating this object performs the function on an input array and returns the result, saving necessary values
+Back propagating this object  uses the saved values to return the derivative of the inputs before the operation
+"""
+
 import numpy as np
 
 class SigmoidLayer(object):

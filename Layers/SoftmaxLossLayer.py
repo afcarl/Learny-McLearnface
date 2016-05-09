@@ -5,6 +5,13 @@ Created on Fri May 06 14:55:21 2016
 @author: Alexander Weaver
 """
 
+"""
+Performs the softmax loss function and its derivative on a set of class scores
+Given N examples with D classes, takes an NxD array representing the class scores
+Interprets the scores as unnormalized log probabilities, and performs the cross-entropy loss function
+Returns the loss function and the derivatives of the scores with respect to the loss, for backpropagation
+"""
+
 import numpy as np
 
 class SoftmaxLossLayer(object):
