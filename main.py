@@ -35,7 +35,7 @@ def main():
     print nn.layers[0].db.shape
     print 'Loss with reg=0: ', loss
     loss, _ = nn.backward(test_data, test_y, 10)
-    print 'Loss with reg=10: ', loss
+    print 'Loss with reg=10: ', loss  
     
     probabilities = nn.classify(test_data)
     N, C = probabilities.shape

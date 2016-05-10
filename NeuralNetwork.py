@@ -65,11 +65,12 @@ class NeuralNetwork(object):
         
     def backward(self, X, y, reg_param=0):
         loss, dx = self.loss(X, y, reg_param)
-        #TODO: regularize
         for layer in reversed(self.layers):
             if layer == self.layers[-1]: 
                 continue
             dx = layer.backward(dx)
+            if type(layer).__name__ == 'AffineLayer':   #TODO: same as above
+                layer.dW += reg_param
         return loss, dx
                 
             
