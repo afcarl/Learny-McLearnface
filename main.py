@@ -30,9 +30,12 @@ def main():
     print evaluator.predict()[0].shape
     print evaluator.predict()[1].shape
     
-    nn.backward(test_data, test_y)
+    loss, _ = nn.backward(test_data, test_y, 0)
     print nn.layers[0].dW.shape
     print nn.layers[0].db.shape
+    print 'Loss with reg=0: ', loss
+    loss, _ = nn.backward(test_data, test_y, 10)
+    print 'Loss with reg=10: ', loss
     
     probabilities = nn.classify(test_data)
     N, C = probabilities.shape

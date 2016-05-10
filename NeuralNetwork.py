@@ -52,12 +52,20 @@ class NeuralNetwork(object):
         scores = self.forward(X)
         return self.layers[-1].evaluate(scores)
         
-    def loss(self, X, y):
+    def loss(self, X, y, reg_param=0):
         scores = self.forward(X)
-        return self.layers[-1].loss(scores, y)
+        loss, dx = self.layers[-1].loss(scores, y)
+        squared_sum = 0.0
+        for layer in self.layers:
+            if type(layer).__name__ == 'AffineLayer': #TODO: upon upgrade to Python 3, "if layer is AffineLayer"
+                squared_sum += np.sum(layer.W * layer.W)
+        loss += 0.5 * reg_param * squared_sum
+        return loss, dx
         
-    def backward(self, X, y):
-        loss, dx = self.loss(X, y)
+        
+    def backward(self, X, y, reg_param=0):
+        loss, dx = self.loss(X, y, reg_param)
+        #TODO: regularize
         for layer in reversed(self.layers):
             if layer == self.layers[-1]: 
                 continue

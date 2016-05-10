@@ -17,6 +17,7 @@ REQUIRED OPTIONS:
 OPTIONAL OPTIONS:
     'batch_size' : The number of examples trained at a time. Default is 128.
     'num_epochs' : The number of passes to make through the dataset.  Default is 1.
+    'reg_param' : The regularization parameter lambda. Nonnegative real number, 0 corresponds to regularization "off"
     """
     def __init__(self, model, data, options):
         self.model = model
@@ -30,6 +31,7 @@ OPTIONAL OPTIONS:
             raise MissingOptionException('Trainer is missing a required option.')
         self.batch_size = options.setdefault('batch_size', 128)
         self.num_epochs = options.setdefault('num_epochs', 1)
+        self.reg_param = options.setdefault('reg_param', 0)
         
         
     def train(self):
@@ -42,7 +44,7 @@ OPTIONAL OPTIONS:
     """
     def update(self):
         X_batch, y_batch = self.get_batch()
-        loss, dx = self.model.backward(X_batch, self.y_batch)
+        loss, dx = self.model.backward(X_batch, self.y_batch, self.reg_param)
         for layer in self.model.layers:
             if layer is AffineLayer:
                 layer.dW, self.update_options = optimize(layer.W, layer.dW, self.update_options)
