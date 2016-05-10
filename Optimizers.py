@@ -36,7 +36,7 @@ def sgd(theta, dtheta, options):
     except KeyError:
         raise MissingOptionException('Optimization method is missing a required option.')
     theta -= learning_rate * dtheta
-    return theta
+    return theta, options
 
 class MissingOptionException(Exception):
     pass

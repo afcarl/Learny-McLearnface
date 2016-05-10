@@ -34,4 +34,9 @@ def main():
     print nn.layers[0].dW.shape
     print nn.layers[0].db.shape
     
+    probabilities = nn.classify(test_data)
+    N, C = probabilities.shape
+    predicted_classes = np.argmax(probabilities, axis=1)
+    print np.mean(predicted_classes == test_y)
+    
 main()

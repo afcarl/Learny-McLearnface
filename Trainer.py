@@ -5,6 +5,10 @@ Created on Mon May 09 15:09:03 2016
 @author: Alexander Weaver
 """
 
+import numpy as np
+
+from Optimizers import *
+
 class Trainer(object):
     
     """
@@ -37,8 +41,24 @@ OPTIONAL OPTIONS:
     Performs a single gradient descent update
     """
     def update(self):
-        loss, dx = self.model.loss(self.X_train, self.y_train)
+        X_batch, y_batch = self.get_batch()
+        loss, dx = self.model.backward(X_batch, self.y_batch)
+        for layer in self.model.layers:
+            if layer is AffineLayer:
+                layer.dW, self.update_options = optimize(layer.W, layer.dW, self.update_options)
         
+    def get_batch(self):
+        N = self.X_train.shape[0]
+        indices = np.random.choice(N, self.batch_size)
+        X_batch = self.X_train[indices]
+        y_batch = self.y_train[indices]
+        return X_batch, y_batch
+        
+    def accuracy(self, X, y):
+        probabilities = self.model.classify(X)
+        N, C = probabilities.shape
+        predicted_classes = np.argmax(probabilities, axis=1)
+        return np.mean(predicted_classes == y)
         
 class MissingOptionException(Exception):
     pass

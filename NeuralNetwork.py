@@ -62,7 +62,7 @@ class NeuralNetwork(object):
             if layer == self.layers[-1]: 
                 continue
             dx = layer.backward(dx)
-        return dx
+        return loss, dx
                 
             
             
