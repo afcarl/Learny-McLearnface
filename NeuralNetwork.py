@@ -45,8 +45,26 @@ class NeuralNetwork(object):
         forward_tensor = X
         for layer in self.layers:
             if layer == self.layers[-1]:
-                return self.layers[-1].evaluate(forward_tensor)
+                return forward_tensor
             forward_tensor = layer.forward(forward_tensor)
+            
+    def classify(self, X):
+        scores = self.forward(X)
+        return self.layers[-1].evaluate(scores)
+        
+    def loss(self, X, y):
+        scores = self.forward(X)
+        return self.layers[-1].loss(scores, y)
+        
+    def backward(self, X, y):
+        loss, dx = self.loss(X, y)
+        for layer in reversed(self.layers):
+            if layer == self.layers[-1]: 
+                continue
+            dx = layer.backward(dx)
+        return dx
+                
+            
             
 class InvalidLayerException(Exception):
     pass

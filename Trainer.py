@@ -33,8 +33,12 @@ OPTIONAL OPTIONS:
         updates_per_epoch = max(N/self.batch_size, 1)
         num_updates = updates_per_epoch * self.num_epochs
         
+    """
+    Performs a single gradient descent update
+    """
     def update(self):
-        pass
+        loss, dx = self.model.loss(self.X_train, self.y_train)
+        
         
 class MissingOptionException(Exception):
     pass

@@ -14,6 +14,7 @@ from Layers.AffineLayer import *
 from Layers.ReLULayer import *
 
 from Evaluator import *
+from Trainer import *
 
 def main():
     nn = NeuralNetwork(28*28)
@@ -28,5 +29,9 @@ def main():
     evaluator = Evaluator(nn, test_data)
     print evaluator.predict()[0].shape
     print evaluator.predict()[1].shape
+    
+    nn.backward(test_data, test_y)
+    print nn.layers[0].dW.shape
+    print nn.layers[0].db.shape
     
 main()

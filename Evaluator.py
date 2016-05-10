@@ -26,7 +26,7 @@ class Evaluator(object):
         self.data = data
         
     def get_probabilities(self):
-        probabilities = self.model.forward(self.data)
+        probabilities = self.model.classify(self.data)
         return probabilities
         
     def predict(self):

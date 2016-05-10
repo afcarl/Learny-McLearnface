@@ -46,6 +46,6 @@ class AffineLayer(object):
         N = x.shape[0]  
         reshaped_x = x.reshape(N, np.prod(x.shape[1:]))
         dx = dout.dot(np.transpose(self.W)).reshape(x.shape)
-        dW = np.transpose(reshaped_x).dot(dout)
-        db = np.sum(dout, axis=0)
-        return dx, dW, db
+        self.dW = np.transpose(reshaped_x).dot(dout)
+        self.db = np.sum(dout, axis=0)
+        return dx
