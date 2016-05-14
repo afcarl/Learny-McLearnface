@@ -23,12 +23,15 @@ import numpy as np
 
 class AffineLayer(object):
     
-    def __init__(self, in_dim, out_dim, weight_scale):
+    def __init__(self, in_dim, out_dim, weight_scale, data_type=np.float32):
         self.in_dim = in_dim
         self.out_dim = out_dim
         self.weight_scale = weight_scale
+        self.data_type = data_type
         self.W = np.random.randn(in_dim, out_dim) * weight_scale
+        self.W = self.W.astype(self.data_type)
         self.b = np.zeros(out_dim)
+        self.b = self.b.astype(self.data_type)
         
     def forward(self, x, W=None, b=None):
         if W is None:

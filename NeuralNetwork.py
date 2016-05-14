@@ -15,8 +15,9 @@ class NeuralNetwork(object):
     layers = []
     num_layers = 0
     
-    def __init__(self, input_dim):
+    def __init__(self, input_dim, data_type=np.float32):
         self.input_dim = input_dim
+        self.data_type = data_type
     
     def add_layer(self, layer_type, params):
         if not self.layers:
@@ -27,7 +28,7 @@ class NeuralNetwork(object):
             layer = SoftmaxLossLayer(in_dim)
             self.layers.append(layer)
         elif layer_type == 'Affine':
-            layer = AffineLayer(in_dim, params['neurons'], params['weight_scale'])
+            layer = AffineLayer(in_dim, params['neurons'], params['weight_scale'], self.data_type)
             self.layers.append(layer)
             self.num_layers += 1
         elif layer_type == 'ReLU':
@@ -42,6 +43,7 @@ class NeuralNetwork(object):
             raise InvalidLayerException('Invalid layer: ' + layer_type)
             
     def forward(self, X):
+        X = X.astype(self.data_type)
         forward_tensor = X
         for layer in self.layers:
             if layer == self.layers[-1]:
@@ -49,10 +51,12 @@ class NeuralNetwork(object):
             forward_tensor = layer.forward(forward_tensor)
             
     def classify(self, X):
+        X = X.astype(self.data_type)
         scores = self.forward(X)
         return self.layers[-1].evaluate(scores)
         
     def loss(self, X, y, reg_param=0.0):
+        X = X.astype(self.data_type)
         scores = self.forward(X)
         loss, dx = self.layers[-1].loss(scores, y)
         squared_sum = 0.0
@@ -64,6 +68,7 @@ class NeuralNetwork(object):
         
         
     def backward(self, X, y, reg_param=0.0):
+        X = X.astype(self.data_type)
         loss, dx = self.loss(X, y, reg_param)
         for layer in reversed(self.layers):
             if layer == self.layers[-1]: 
