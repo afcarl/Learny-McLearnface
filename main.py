@@ -17,10 +17,14 @@ from Evaluator import *
 from Trainer import *
 
 def main():
-    nn = NeuralNetwork(700)
-    nn.add_layer('Affine', {'neurons':500, 'weight_scale':1e-2})
+    opts = {
+        'init_scheme' : 'xavier'
+    }    
+    
+    nn = NeuralNetwork(700, options=opts)
+    nn.add_layer('Affine', {'neurons':500})
     nn.add_layer('ReLU', {})
-    nn.add_layer('Affine', {'neurons':10, 'weight_scale':1e-2})
+    nn.add_layer('Affine', {'neurons':10})
     nn.add_layer('SoftmaxLoss', {})
     
     test_data = np.random.randn(100, 700)
@@ -33,13 +37,8 @@ def main():
         'y_val' : test_y
     }
     
-    update_opts = {
-        'update_rule' : 'sgd',
-        'learning_rate' : 1
-    }
-    
     opts = {
-        'update_options' : update_opts,
+        'update_options' : {'update_rule' : 'sgd', 'learning_rate' : 1},
         'reg_param' : 0,
         'num_epochs' : 6
     }    

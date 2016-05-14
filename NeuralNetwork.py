@@ -15,20 +15,26 @@ class NeuralNetwork(object):
     layers = []
     num_layers = 0
     
-    def __init__(self, input_dim, data_type=np.float32):
+    def __init__(self, input_dim, options={}, data_type=np.float32):
         self.input_dim = input_dim
         self.data_type = data_type
+        self.init_scheme = options.setdefault('init_scheme', 'xavier')
     
     def add_layer(self, layer_type, params):
         if not self.layers:
             in_dim = self.input_dim
         else:
             in_dim = self.layers[-1].out_dim
+        if 'weight_scale' in params:
+            weight_scale = params['weight_scale']
+        elif self.init_scheme == 'xavier':
+            print in_dim
+            weight_scale = 1./np.sqrt(in_dim)
         if layer_type == 'SoftmaxLoss':
             layer = SoftmaxLossLayer(in_dim)
             self.layers.append(layer)
         elif layer_type == 'Affine':
-            layer = AffineLayer(in_dim, params['neurons'], params['weight_scale'], self.data_type)
+            layer = AffineLayer(in_dim, params['neurons'], weight_scale, self.data_type)
             self.layers.append(layer)
             self.num_layers += 1
         elif layer_type == 'ReLU':
