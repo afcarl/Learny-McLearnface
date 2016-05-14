@@ -20,7 +20,6 @@ import numpy as np
 -The smaller the accuracy value, the more accurate the approximation will be
 """
 def numerical_gradient(f, x, accuracy=1e-5):
-    N, D = x.shape
     grads = np.zeros(x.shape)
     iterator = np.nditer(x, flags = ['multi_index'], op_flags = ['readwrite'])
     while not iterator.finished:

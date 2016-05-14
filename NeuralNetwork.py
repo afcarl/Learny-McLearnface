@@ -52,7 +52,7 @@ class NeuralNetwork(object):
         scores = self.forward(X)
         return self.layers[-1].evaluate(scores)
         
-    def loss(self, X, y, reg_param=0):
+    def loss(self, X, y, reg_param=0.0):
         scores = self.forward(X)
         loss, dx = self.layers[-1].loss(scores, y)
         squared_sum = 0.0
@@ -63,14 +63,14 @@ class NeuralNetwork(object):
         return loss, dx
         
         
-    def backward(self, X, y, reg_param=0):
+    def backward(self, X, y, reg_param=0.0):
         loss, dx = self.loss(X, y, reg_param)
         for layer in reversed(self.layers):
             if layer == self.layers[-1]: 
                 continue
             dx = layer.backward(dx)
             if type(layer).__name__ == 'AffineLayer':   #TODO: same as above
-                layer.dW += reg_param
+                layer.dW += reg_param * layer.W
         return loss, dx
                 
             
