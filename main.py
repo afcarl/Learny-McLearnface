@@ -26,20 +26,39 @@ def main():
     test_data = np.random.randn(100, 28*28)
     test_y = np.random.randint(1, 10, 100)
     
-    evaluator = Evaluator(nn, test_data)
-    print evaluator.predict()[0].shape
-    print evaluator.predict()[1].shape
+    data = {
+        'X_train' : test_data,
+        'y_train' : test_y,
+        'X_val' : test_data,
+        'y_val' : test_y
+    }
+    
+    update_opts = {
+        'update_rule' : 'sgd',
+        'learning_rate' : 1
+    }
+    
+    opts = {
+        'update_options' : update_opts,
+        'reg_param' : 0
+    }    
+    
+    trainer = Trainer(nn, data, opts)
     
     loss, _ = nn.backward(test_data, test_y, 0)
-    print nn.layers[0].dW.shape
-    print nn.layers[0].db.shape
-    print 'Loss with reg=0: ', loss
-    loss, _ = nn.backward(test_data, test_y, 10)
-    print 'Loss with reg=10: ', loss  
+    print 'Initial loss: ', loss
+    
+    updates = 5
+    for i in range(updates):
+        trainer.update()
+        loss, _ = nn.backward(test_data, test_y, 0)
+        print 'Loss after ', i+1, ' update(s): ', loss
     
     probabilities = nn.classify(test_data)
     N, C = probabilities.shape
     predicted_classes = np.argmax(probabilities, axis=1)
     print np.mean(predicted_classes == test_y)
+    
+    
     
 main()

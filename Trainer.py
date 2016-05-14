@@ -44,10 +44,11 @@ OPTIONAL OPTIONS:
     """
     def update(self):
         X_batch, y_batch = self.get_batch()
-        loss, dx = self.model.backward(X_batch, self.y_batch, self.reg_param)
+        loss, dx = self.model.backward(X_batch, y_batch, self.reg_param)
         for layer in self.model.layers:
-            if layer is AffineLayer:
-                layer.dW, self.update_options = optimize(layer.W, layer.dW, self.update_options)
+            if type(layer).__name__ == 'AffineLayer':
+                layer.W, self.update_options = optimize(layer.W, layer.dW, self.update_options)
+                layer.b, self.update_options = optimize(layer.b, layer.db, self.update_options)
         
     def get_batch(self):
         N = self.X_train.shape[0]

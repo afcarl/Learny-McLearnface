@@ -18,7 +18,7 @@ Each method will take a dictionary of options, which contains settings specific 
 Optimization method wrapper function. Selects the correct method based on the given options.
 """
 def optimize(theta, dtheta, options):
-    update_rule = options.setdefault['update_rule', 'sgd']
+    update_rule = options.setdefault('update_rule', 'sgd')
     if update_rule == 'sgd':
         return sgd(theta, dtheta, options)
     else:
