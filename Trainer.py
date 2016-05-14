@@ -38,6 +38,10 @@ OPTIONAL OPTIONS:
         N = self.X_train.shape[0]
         updates_per_epoch = max(N/self.batch_size, 1)
         num_updates = updates_per_epoch * self.num_epochs
+        for i in range(num_updates):
+            self.update()
+            if self.is_end_of_epoch(i, updates_per_epoch):
+                print 'Epoch ', (i+1)/updates_per_epoch, ' of ', self.num_epochs, '. Validation accuracy: ', self.accuracy(self.X_val, self.y_val)
         
     """
     Performs a single gradient descent update
@@ -50,6 +54,10 @@ OPTIONAL OPTIONS:
                 layer.W, self.update_options = optimize(layer.W, layer.dW, self.update_options)
                 layer.b, self.update_options = optimize(layer.b, layer.db, self.update_options)
         
+    """
+    Samples a random minibatch of data from the training set, self.batch_size elements
+    Returns the minibatch data and labels in array form
+    """
     def get_batch(self):
         N = self.X_train.shape[0]
         indices = np.random.choice(N, self.batch_size)
@@ -57,11 +65,17 @@ OPTIONAL OPTIONS:
         y_batch = self.y_train[indices]
         return X_batch, y_batch
         
+    """
+    Returns the percent accuracy of the network on the given dataset and labels
+    """
     def accuracy(self, X, y):
         probabilities = self.model.classify(X)
         N, C = probabilities.shape
         predicted_classes = np.argmax(probabilities, axis=1)
         return np.mean(predicted_classes == y)
+        
+    def is_end_of_epoch(self, iteration_index, iterations_per_epoch):
+        return (iteration_index+1) % iterations_per_epoch == 0
         
 class MissingOptionException(Exception):
     pass

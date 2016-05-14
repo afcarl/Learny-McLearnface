@@ -17,13 +17,13 @@ from Evaluator import *
 from Trainer import *
 
 def main():
-    nn = NeuralNetwork(28*28)
+    nn = NeuralNetwork(700)
     nn.add_layer('Affine', {'neurons':500, 'weight_scale':1e-2})
     nn.add_layer('ReLU', {})
     nn.add_layer('Affine', {'neurons':10, 'weight_scale':1e-2})
     nn.add_layer('SoftmaxLoss', {})
     
-    test_data = np.random.randn(100, 28*28)
+    test_data = np.random.randn(100, 700)
     test_y = np.random.randint(1, 10, 100)
     
     data = {
@@ -40,24 +40,19 @@ def main():
     
     opts = {
         'update_options' : update_opts,
-        'reg_param' : 0
+        'reg_param' : 0,
+        'num_epochs' : 6
     }    
     
     trainer = Trainer(nn, data, opts)
     
-    loss, _ = nn.backward(test_data, test_y, 0)
-    print 'Initial loss: ', loss
+    accuracy = trainer.accuracy(test_data, test_y)
+    print 'Initial model accuracy: ', accuracy
     
-    updates = 5
-    for i in range(updates):
-        trainer.update()
-        loss, _ = nn.backward(test_data, test_y, 0)
-        print 'Loss after ', i+1, ' update(s): ', loss
+    trainer.train()
     
-    probabilities = nn.classify(test_data)
-    N, C = probabilities.shape
-    predicted_classes = np.argmax(probabilities, axis=1)
-    print np.mean(predicted_classes == test_y)
+    accuracy = trainer.accuracy(test_data, test_y)
+    print 'Final model accuracy: ', accuracy
     
     
     
