@@ -46,12 +46,12 @@ def main():
     trainer = Trainer(nn, data, opts)
     
     accuracy = trainer.accuracy(test_data, test_y)
-    print 'Initial model accuracy: ', accuracy
+    print('Initial model accuracy:', accuracy)
     
     trainer.train()
     
     accuracy = trainer.accuracy(test_data, test_y)
-    print 'Final model accuracy: ', accuracy
+    print('Final model accuracy:', accuracy)
     
     
     

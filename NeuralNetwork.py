@@ -28,7 +28,6 @@ class NeuralNetwork(object):
         if 'weight_scale' in params:
             weight_scale = params['weight_scale']
         elif self.init_scheme == 'xavier':
-            print in_dim
             weight_scale = 1./np.sqrt(in_dim)
         if layer_type == 'SoftmaxLoss':
             layer = SoftmaxLossLayer(in_dim)
@@ -67,7 +66,7 @@ class NeuralNetwork(object):
         loss, dx = self.layers[-1].loss(scores, y)
         squared_sum = 0.0
         for layer in self.layers:
-            if type(layer).__name__ == 'AffineLayer': #TODO: upon upgrade to Python 3, "if layer is AffineLayer"
+            if isinstance(layer, AffineLayer):
                 squared_sum += np.sum(layer.W * layer.W)
         loss += 0.5 * reg_param * squared_sum
         return loss, dx
@@ -80,7 +79,7 @@ class NeuralNetwork(object):
             if layer == self.layers[-1]: 
                 continue
             dx = layer.backward(dx)
-            if type(layer).__name__ == 'AffineLayer':   #TODO: same as above
+            if isinstance(layer, AffineLayer):
                 layer.dW += reg_param * layer.W
         return loss, dx
                 

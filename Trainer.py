@@ -9,6 +9,8 @@ import numpy as np
 
 from Optimizers import *
 
+from Layers.AffineLayer import *
+
 class Trainer(object):
     
     """
@@ -36,12 +38,12 @@ OPTIONAL OPTIONS:
         
     def train(self):
         N = self.X_train.shape[0]
-        updates_per_epoch = max(N/self.batch_size, 1)
+        updates_per_epoch = max(N//self.batch_size, 1)
         num_updates = updates_per_epoch * self.num_epochs
         for i in range(num_updates):
             self.update()
             if self.is_end_of_epoch(i, updates_per_epoch):
-                print 'Epoch ', (i+1)/updates_per_epoch, ' of ', self.num_epochs, '. Validation accuracy: ', self.accuracy(self.X_val, self.y_val)
+                print('Epoch', (i+1)//updates_per_epoch, 'of', self.num_epochs, 'Validation accuracy:', self.accuracy(self.X_val, self.y_val))
         
     """
     Performs a single gradient descent update
@@ -50,7 +52,7 @@ OPTIONAL OPTIONS:
         X_batch, y_batch = self.get_batch()
         loss, dx = self.model.backward(X_batch, y_batch, self.reg_param)
         for layer in self.model.layers:
-            if type(layer).__name__ == 'AffineLayer':
+            if isinstance(layer, AffineLayer):
                 layer.W, self.update_options = optimize(layer.W, layer.dW, self.update_options)
                 layer.b, self.update_options = optimize(layer.b, layer.db, self.update_options)
         
