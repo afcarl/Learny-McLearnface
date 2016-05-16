@@ -6,22 +6,14 @@ Created on Fri May 06 17:56:07 2016
 """
 
 import numpy as np
-from NeuralNetwork import *
-from Utils.NumericalGradient import *
-
-from Layers.SoftmaxLossLayer import *
-from Layers.AffineLayer import *
-from Layers.ReLULayer import *
-
-from Evaluator import *
-from Trainer import *
+import LearnyMcLearnface as lml
 
 def main():
     opts = {
         'init_scheme' : 'xavier'
     }    
     
-    nn = NeuralNetwork(700, options=opts)
+    nn = lml.NeuralNetwork(700, options=opts)
     nn.add_layer('Affine', {'neurons':500})
     nn.add_layer('ReLU', {})
     nn.add_layer('Affine', {'neurons':10})
@@ -43,7 +35,7 @@ def main():
         'num_epochs' : 6
     }    
     
-    trainer = Trainer(nn, data, opts)
+    trainer = lml.Trainer(nn, data, opts)
     
     accuracy = trainer.accuracy(test_data, test_y)
     print('Initial model accuracy:', accuracy)

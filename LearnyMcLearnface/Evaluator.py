@@ -17,7 +17,7 @@ The first vector indicates the predicted class for each example
 The second vector indicates the percent confidence for each prediction, correspondingly
 """
 
-from NeuralNetwork import *
+from .NeuralNetwork import *
 
 class Evaluator(object):
     

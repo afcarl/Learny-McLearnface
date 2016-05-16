@@ -5,10 +5,9 @@ Created on Fri May 06 14:34:21 2016
 @author: Alexander Weaver
 """
 
-from Layers.SoftmaxLossLayer import *
-from Layers.AffineLayer import *
-from Layers.ReLULayer import *
-from Layers.SigmoidLayer import *
+import numpy as np
+from . import Layers as layers
+from . import Utils as utils
 
 class NeuralNetwork(object):
     
@@ -30,18 +29,18 @@ class NeuralNetwork(object):
         elif self.init_scheme == 'xavier':
             weight_scale = 1./np.sqrt(in_dim)
         if layer_type == 'SoftmaxLoss':
-            layer = SoftmaxLossLayer(in_dim)
+            layer = layers.SoftmaxLossLayer(in_dim)
             self.layers.append(layer)
         elif layer_type == 'Affine':
-            layer = AffineLayer(in_dim, params['neurons'], weight_scale, self.data_type)
+            layer = layers.AffineLayer(in_dim, params['neurons'], weight_scale, self.data_type)
             self.layers.append(layer)
             self.num_layers += 1
         elif layer_type == 'ReLU':
-            layer = ReLULayer(in_dim)
+            layer = layers.ReLULayer(in_dim)
             self.layers.append(layer)
             self.num_layers += 1
         elif layer_type == 'Sigmoid':
-            layer = SigmoidLayer(in_dim)
+            layer = layers.SigmoidLayer(in_dim)
             self.layers.append(layer)
             self.num_layers += 1
         else:
@@ -66,7 +65,7 @@ class NeuralNetwork(object):
         loss, dx = self.layers[-1].loss(scores, y)
         squared_sum = 0.0
         for layer in self.layers:
-            if isinstance(layer, AffineLayer):
+            if isinstance(layer, layers.AffineLayer):
                 squared_sum += np.sum(layer.W * layer.W)
         loss += 0.5 * reg_param * squared_sum
         return loss, dx
@@ -79,7 +78,7 @@ class NeuralNetwork(object):
             if layer == self.layers[-1]: 
                 continue
             dx = layer.backward(dx)
-            if isinstance(layer, AffineLayer):
+            if isinstance(layer, layers.AffineLayer):
                 layer.dW += reg_param * layer.W
         return loss, dx
                 

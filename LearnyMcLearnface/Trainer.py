@@ -7,9 +7,9 @@ Created on Mon May 09 15:09:03 2016
 
 import numpy as np
 
-from Optimizers import *
+from .Optimizers import *
 
-from Layers.AffineLayer import *
+from . import Layers as layers
 
 class Trainer(object):
     
@@ -52,7 +52,7 @@ OPTIONAL OPTIONS:
         X_batch, y_batch = self.get_batch()
         loss, dx = self.model.backward(X_batch, y_batch, self.reg_param)
         for layer in self.model.layers:
-            if isinstance(layer, AffineLayer):
+            if isinstance(layer, layers.AffineLayer):
                 layer.W, self.update_options = optimize(layer.W, layer.dW, self.update_options)
                 layer.b, self.update_options = optimize(layer.b, layer.db, self.update_options)
         
