@@ -13,7 +13,7 @@ Implements the formulas given near the top of http://cs231n.github.io/neural-net
 import numpy as np
 
 """
--Given a numerical function f:R^2 -> R (taking a numpy array of real numbers and returning a real number) and a point x
+-Given a numerical function f:R^n -> R (taking a numpy array of real numbers and returning a real number) and a point x
  at which the function should be evaluated, returns the approximate gradient of all variables in x
  The given function should only take one argument, the numpy array. To evaluate parameterized functions, use
      numerical_gradient(lambda x: f(x, parameters...), x0, accuracy)
@@ -36,9 +36,9 @@ def numerical_gradient(f, x, accuracy=1e-5):
     return grads
     
 """
--Given a numerical function (typically expected to be a "layer" inside a differentiable system) f:R^2 -> R^2, 
- a point x at which the function is evaluated, and the gradient flowing into the section of the system, returns
- the approximate gradient of all variables in x
+-Given a numerical function on arrays (typically expected to be a "layer" inside a differentiable system) 
+ f:R^n -> R^n, a point x at which the function is evaluated, and the gradient flowing into the section of the 
+ system, returns the approximate gradient of all variables in x
  The given function should only take one argument, the numpy array. To evaluate parameterized functions, use
      numerical_gradient(lambda x: f(x, parameters...), x0, dout, accuracy)
 -The smaller the accuracy value, the more accurate the approximation will be
