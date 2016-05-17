@@ -9,6 +9,7 @@ from .AffineLayer import *
 from .ReLULayer import *
 from .SigmoidLayer import *
 from .SoftmaxLossLayer import *
+from .SVMLossLayer import *
 from .TanhLayer import *
 
-__all__ = ['AffineLayer', 'ReLULayer', 'SigmoidLayer', 'SoftmaxLossLayer', 'TanhLayer']
+__all__ = ['AffineLayer', 'ReLULayer', 'SigmoidLayer', 'SoftmaxLossLayer', 'SVMLossLayer', 'TanhLayer']
