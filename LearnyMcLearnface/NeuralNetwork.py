@@ -14,9 +14,9 @@ class NeuralNetwork(object):
     layers = []
     num_layers = 0
     
-    def __init__(self, input_dim, options={}, data_type=np.float32):
-        self.input_dim = input_dim
-        self.data_type = data_type
+    def __init__(self, options):
+        self.input_dim = options['input_dim']
+        self.data_type = options.setdefault('data_type', np.float32)
         self.init_scheme = options.setdefault('init_scheme', 'xavier')
     
     def add_layer(self, layer_type, params):
@@ -31,6 +31,9 @@ class NeuralNetwork(object):
         if layer_type == 'SoftmaxLoss':
             layer = layers.SoftmaxLossLayer(in_dim)
             self.layers.append(layer)
+        elif layer_type == 'SVMLoss':
+            layer = layers.SVMLossLayer(in_dim)
+            self.layers.append(layer)
         elif layer_type == 'Affine':
             layer = layers.AffineLayer(in_dim, params['neurons'], weight_scale, self.data_type)
             self.layers.append(layer)
@@ -41,6 +44,10 @@ class NeuralNetwork(object):
             self.num_layers += 1
         elif layer_type == 'Sigmoid':
             layer = layers.SigmoidLayer(in_dim)
+            self.layers.append(layer)
+            self.num_layers += 1
+        elif layer_type == 'Tanh':
+            layer = layers.TanhLayer(in_dim)
             self.layers.append(layer)
             self.num_layers += 1
         else:

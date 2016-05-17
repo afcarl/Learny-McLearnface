@@ -10,10 +10,11 @@ import LearnyMcLearnface as lml
 
 def main():
     opts = {
+        'input_dim' : 700,
         'init_scheme' : 'xavier'
     }    
     
-    nn = lml.NeuralNetwork(700, options=opts)
+    nn = lml.NeuralNetwork(opts)
     nn.add_layer('Affine', {'neurons':500})
     nn.add_layer('ReLU', {})
     nn.add_layer('Affine', {'neurons':10})
