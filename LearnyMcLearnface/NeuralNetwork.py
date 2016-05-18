@@ -11,13 +11,13 @@ from . import Utils as utils
 
 class NeuralNetwork(object):
     
-    layers = []
-    num_layers = 0
     
     def __init__(self, options):
         self.input_dim = options['input_dim']
         self.data_type = options.setdefault('data_type', np.float32)
         self.init_scheme = options.setdefault('init_scheme', 'xavier')
+        self.layers = []
+        self.num_layers = 0
     
     def add_layer(self, layer_type, params):
         if not self.layers:
@@ -38,6 +38,13 @@ class NeuralNetwork(object):
             layer = layers.AffineLayer(in_dim, params['neurons'], weight_scale, self.data_type)
             self.layers.append(layer)
             self.num_layers += 1
+        elif layer_type == 'Dropout':
+            if 'seed' in params:
+                layer = layers.DropoutLayer(in_dim, params['dropout_param'], seed=params['seed'])
+            else:
+                layer = layers.DropoutLayer(in_dim, params['dropout_param'])
+            self.layers.append(layer)
+            self.num_layers += 1
         elif layer_type == 'ReLU':
             layer = layers.ReLULayer(in_dim)
             self.layers.append(layer)
@@ -53,13 +60,16 @@ class NeuralNetwork(object):
         else:
             raise InvalidLayerException('Invalid layer: ' + layer_type)
             
-    def forward(self, X):
+    def forward(self, X, train=False):
         X = X.astype(self.data_type)
         forward_tensor = X
         for layer in self.layers:
             if layer == self.layers[-1]:
                 return forward_tensor
-            forward_tensor = layer.forward(forward_tensor)
+            if isinstance(layer, layers.DropoutLayer) and train:
+                forward_tensor = layer.forward_train(forward_tensor)
+            else:
+                forward_tensor = layer.forward(forward_tensor)
             
     def classify(self, X):
         X = X.astype(self.data_type)
@@ -68,7 +78,7 @@ class NeuralNetwork(object):
         
     def loss(self, X, y, reg_param=0.0):
         X = X.astype(self.data_type)
-        scores = self.forward(X)
+        scores = self.forward(X, train=True)
         loss, dx = self.layers[-1].loss(scores, y)
         squared_sum = 0.0
         for layer in self.layers:

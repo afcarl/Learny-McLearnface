@@ -9,6 +9,9 @@ import numpy as np
 import LearnyMcLearnface as lml
 
 def main():
+    
+    d = lml.layers.DropoutLayer(10, 1)
+    
     opts = {
         'input_dim' : 700,
         'init_scheme' : 'xavier'
@@ -17,11 +20,13 @@ def main():
     nn = lml.NeuralNetwork(opts)
     nn.add_layer('Affine', {'neurons':500})
     nn.add_layer('ReLU', {})
+    nn.add_layer('Dropout', {'dropout_param':0.9})
     nn.add_layer('Affine', {'neurons':10})
     nn.add_layer('SoftmaxLoss', {})
     
     test_data = np.random.randn(100, 700)
     test_y = np.random.randint(1, 10, 100)
+    d.forward_train(test_data)
     
     data = {
         'X_train' : test_data,
