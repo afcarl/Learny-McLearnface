@@ -55,6 +55,8 @@ OPTIONAL OPTIONS:
             if isinstance(layer, layers.AffineLayer):
                 layer.W, self.update_options = optimize(layer.W, layer.dW, self.update_options)
                 layer.b, self.update_options = optimize(layer.b, layer.db, self.update_options)
+            if isinstance(layer, layers.PReLULayer):
+                layer.W, self.update_options = optimize(layer.W, layer.dW, self.update_options)
         
     """
     Samples a random minibatch of data from the training set, self.batch_size elements

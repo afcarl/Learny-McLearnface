@@ -45,6 +45,10 @@ class NeuralNetwork(object):
                 layer = layers.DropoutLayer(in_dim, params['dropout_param'])
             self.layers.append(layer)
             self.num_layers += 1
+        elif layer_type == 'PReLU':
+            layer = layers.PReLULayer(in_dim, self.data_type)
+            self.layers.append(layer)
+            self.num_layers += 1
         elif layer_type == 'ReLU':
             layer = layers.ReLULayer(in_dim)
             self.layers.append(layer)

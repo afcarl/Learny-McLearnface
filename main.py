@@ -19,7 +19,7 @@ def main():
     
     nn = lml.NeuralNetwork(opts)
     nn.add_layer('Affine', {'neurons':500})
-    nn.add_layer('ReLU', {})
+    nn.add_layer('PReLU', {})
     nn.add_layer('Dropout', {'dropout_param':0.9})
     nn.add_layer('Affine', {'neurons':10})
     nn.add_layer('SoftmaxLoss', {})
