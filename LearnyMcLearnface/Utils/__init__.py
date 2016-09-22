@@ -6,5 +6,6 @@ Created on Sat May 07 01:02:28 2016
 """
 
 from .NumericalGradient import *
+from .MNIST import *
 
-__all__ = ['NumericalGradient']
+__all__ = ['NumericalGradient', 'MNIST']

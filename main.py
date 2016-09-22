@@ -10,45 +10,43 @@ import LearnyMcLearnface as lml
 
 def main():
     
-    d = lml.layers.DropoutLayer(10, 1)
+    X_train, y_train, X_test, y_test = lml.utils.get_mnist()
+    
+    data = {
+        'X_train' : X_train,
+        'y_train' : y_train,
+        'X_val' : X_test,
+        'y_val' : y_test
+    }
+    
+    for i in range(10):
+        pass
     
     opts = {
-        'input_dim' : 700,
+        'input_dim' : 28*28,
         'init_scheme' : 'xavier'
     }    
     
     nn = lml.NeuralNetwork(opts)
     nn.add_layer('Affine', {'neurons':500})
-    nn.add_layer('PReLU', {})
-    nn.add_layer('Dropout', {'dropout_param':0.9})
+    nn.add_layer('ReLU', {})
     nn.add_layer('Affine', {'neurons':10})
     nn.add_layer('SoftmaxLoss', {})
     
-    test_data = np.random.randn(100, 700)
-    test_y = np.random.randint(1, 10, 100)
-    d.forward_train(test_data)
-    
-    data = {
-        'X_train' : test_data,
-        'y_train' : test_y,
-        'X_val' : test_data,
-        'y_val' : test_y
-    }
-    
     opts = {
-        'update_options' : {'update_rule' : 'sgd', 'learning_rate' : 1},
+        'update_options' : {'update_rule' : 'sgd', 'learning_rate' : 1e-2},
         'reg_param' : 0,
         'num_epochs' : 6
     }    
     
     trainer = lml.Trainer(nn, data, opts)
     
-    accuracy = trainer.accuracy(test_data, test_y)
+    accuracy = trainer.accuracy(X_test, y_test)
     print('Initial model accuracy:', accuracy)
     
     trainer.train()
     
-    accuracy = trainer.accuracy(test_data, test_y)
+    accuracy = trainer.accuracy(X_test, y_test)
     print('Final model accuracy:', accuracy)
     
     
