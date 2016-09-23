@@ -5,6 +5,10 @@ Created on Fri May 06 17:56:07 2016
 @author: Alexander Weaver
 """
 
+"""
+This is an executable script used purely for experimentation.
+"""
+
 import numpy as np
 import LearnyMcLearnface as lml
 
@@ -28,14 +32,18 @@ def main():
     }    
     
     nn = lml.NeuralNetwork(opts)
-    nn.add_layer('Affine', {'neurons':500})
-    nn.add_layer('ReLU', {})
+    nn.add_layer('Affine', {'neurons':600})
+    nn.add_layer('Batchnorm', {'decay':0.9})
+    nn.add_layer('PReLU', {})
+    nn.add_layer('Affine', {'neurons':300})
+    nn.add_layer('Batchnorm', {'decay':0.9})
+    nn.add_layer('PReLU', {})
     nn.add_layer('Affine', {'neurons':10})
     nn.add_layer('SoftmaxLoss', {})
     
     opts = {
-        'update_options' : {'update_rule' : 'sgd', 'learning_rate' : 1e-2},
-        'reg_param' : 0,
+        'update_options' : {'update_rule' : 'sgd', 'learning_rate' : 1e-3},
+        'reg_param' : 1e-8,
         'num_epochs' : 6
     }    
     
