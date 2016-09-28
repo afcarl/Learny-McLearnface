@@ -6,6 +6,7 @@ Created on Mon May 09 15:09:03 2016
 """
 
 import numpy as np
+import copy
 
 from .Optimizers import *
 
@@ -53,13 +54,23 @@ OPTIONAL OPTIONS:
         loss, dx = self.model.backward(X_batch, y_batch, self.reg_param)
         for layer in self.model.layers:
             if isinstance(layer, layers.AffineLayer):
-                layer.W, self.update_options = optimize(layer.W, layer.dW, self.update_options)
-                layer.b, self.update_options = optimize(layer.b, layer.db, self.update_options)
+                if not hasattr(layer, 'update_options_W'):
+                    layer.update_options_W = copy.deepcopy(self.update_options)
+                if not hasattr(layer, 'update_options_b'):
+                    layer.update_options_b = copy.deepcopy(self.update_options)
+                layer.W, layer.update_options_W = optimize(layer.W, layer.dW, layer.update_options_W)
+                layer.b, layer.update_options_b = optimize(layer.b, layer.db, layer.update_options_b)
             if isinstance(layer, layers.PReLULayer):
-                layer.W, self.update_options = optimize(layer.W, layer.dW, self.update_options)
+                if not hasattr(layer, 'update_options'):
+                    layer.update_options = copy.deepcopy(self.update_options)
+                layer.W, layer.update_options = optimize(layer.W, layer.dW, layer.update_options)
             if isinstance(layer, layers.BatchnormLayer):
-                layer.gamma, self.update_options = optimize(layer.gamma, layer.dgamma, self.update_options)
-                layer.beta, self.update_options = optimize(layer.beta, layer.dbeta, self.update_options)
+                if not hasattr(layer, 'update_options_gamma'):
+                    layer.update_options_gamma = copy.deepcopy(self.update_options)
+                if not hasattr(layer, 'update_options_beta'):
+                    layer.update_options_beta = copy.deepcopy(self.update_options)
+                layer.gamma, layer.update_options_gamma = optimize(layer.gamma, layer.dgamma, layer.update_options_gamma)
+                layer.beta, layer.update_options_beta = optimize(layer.beta, layer.dbeta, layer.update_options_beta)
         
     """
     Samples a random minibatch of data from the training set, self.batch_size elements

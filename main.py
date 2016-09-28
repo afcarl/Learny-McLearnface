@@ -42,7 +42,7 @@ def main():
     nn.add_layer('SoftmaxLoss', {})
     
     opts = {
-        'update_options' : {'update_rule' : 'sgd', 'learning_rate' : 1e-3},
+        'update_options' : {'update_rule' : 'sgd_m', 'learning_rate' : 1e-3, 'momentum' : 0.95},
         'reg_param' : 1e-8,
         'num_epochs' : 6
     }    
