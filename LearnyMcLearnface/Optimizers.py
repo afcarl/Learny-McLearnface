@@ -27,6 +27,8 @@ def optimize(theta, dtheta, options):
         return sgd_m(theta, dtheta, options)
     if update_rule == 'rmsprop':
         return rmsprop(theta, dtheta, options)
+    if update_rule == 'adam':
+        return adam(theta, dtheta, options)
     else:
         raise ValueError("The given update rule was not recognized.")
 
@@ -80,7 +82,34 @@ def rmsprop(theta, dtheta, options):
     options['error'] = error
     return theta - learning_rate * dtheta / (np.sqrt(error) + eps), options
     
-    return 
+"""
+Adaptive moment optimization
+REQUIRED OPTIONS:
+    'learning_rate' : a real number >0, overall step size
+    'beta1' : real number >0 and <1, the decay of the average of first moment of gradient
+    'beta2' : real number >0 and <1, the decay of the average of second moment of gradient
+"""
+def adam(theta, dtheta, options):
+    try:
+        learning_rate = options['learning_rate']
+        beta1 = options['beta1']
+        beta2 = options['beta2']
+    except KeyError:
+        raise MissingOptionException('Optimization method is missing a required option.')
+    eps = options.get('epsilon', 1e-8)
+    options['epsilon'] = eps
+    m = options.get('m', np.zeros_like(theta))
+    v = options.get('v', np.zeros_like(theta))
+    t = options.get('t', 0)
+    t += 1
+    m = beta1 * m + (1 - beta1) * dtheta
+    v = beta2 * v + (1 - beta2) * dtheta**2
+    corrected_m = m/(1 - beta1**t)
+    corrected_v = v/(1 - beta2**t)
+    options['t'] = t
+    options['m'] = m
+    options['v'] = v
+    return theta + (-learning_rate * corrected_m / (np.sqrt(corrected_v) + eps)), options
 
 class MissingOptionException(Exception):
     pass

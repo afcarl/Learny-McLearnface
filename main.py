@@ -42,7 +42,7 @@ def main():
     nn.add_layer('SoftmaxLoss', {})
     
     opts = {
-        'update_options' : {'update_rule' : 'rmsprop', 'learning_rate' : 1e-3, 'decay_rate' : 0.99},
+        'update_options' : {'update_rule' : 'adam', 'learning_rate' : 1e-3, 'beta1' : 0.9, 'beta2' : 0.999},
         'reg_param' : 1e-8,
         'num_epochs' : 2
     }    
