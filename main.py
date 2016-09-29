@@ -42,9 +42,9 @@ def main():
     nn.add_layer('SoftmaxLoss', {})
     
     opts = {
-        'update_options' : {'update_rule' : 'sgd_m', 'learning_rate' : 1e-3, 'momentum' : 0.95},
+        'update_options' : {'update_rule' : 'rmsprop', 'learning_rate' : 1e-3, 'decay_rate' : 0.99},
         'reg_param' : 1e-8,
-        'num_epochs' : 6
+        'num_epochs' : 2
     }    
     
     trainer = lml.Trainer(nn, data, opts)

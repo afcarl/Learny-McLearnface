@@ -25,6 +25,8 @@ def optimize(theta, dtheta, options):
         return sgd(theta, dtheta, options)
     if update_rule == 'sgd_m':
         return sgd_m(theta, dtheta, options)
+    if update_rule == 'rmsprop':
+        return rmsprop(theta, dtheta, options)
     else:
         raise ValueError("The given update rule was not recognized.")
 
@@ -58,6 +60,27 @@ def sgd_m(theta, dtheta, options):
     velocity = momentum * velocity - learning_rate * dtheta
     options['velocity'] = velocity
     return theta + velocity, options
+    
+"""
+Root mean square propagation
+REQUIRED OPTIONS:
+    'learning_rate' : a real number >0, overall step size
+    'decay_rate' : real number >0 and <1, the decay of the gradient cache
+"""
+def rmsprop(theta, dtheta, options):
+    try:
+        learning_rate = options['learning_rate']
+        decay_rate = options['decay_rate']
+    except KeyError:
+        raise MissingOptionException('Optimization method is missing a required option.')
+    eps = options.get('epsilon', 1e-8)
+    options['epsilon'] = eps
+    error = options.get('error', np.zeros_like(theta))
+    error = decay_rate * error + (1 - decay_rate) * dtheta**2
+    options['error'] = error
+    return theta - learning_rate * dtheta / (np.sqrt(error) + eps), options
+    
+    return 
 
 class MissingOptionException(Exception):
     pass
